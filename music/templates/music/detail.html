@@ -1,0 +1,77 @@
+{% extends "music/base.html" %}
+{% load staticfiles %}
+{% block title %}Detail{% endblock %}
+
+{% block content %}
+    <div class = "container-fluid song-container" >
+        <div class = "row">
+            <div class="col-sm-4 col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <img src = "{{ album.album_logo.url }}" class = "img-responsive ">
+                        <h3>{{ album.album_title }} <small>{{ album.genre }}</small></h3>
+                        <h4>{{ album.artist }}</h4>
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 col-sm-9">
+                <ul class="nav nav-pills"   style="margin-bottom:10px;">
+                    <li role="presentation" class = "active"><a href="#">View All</a></li>
+                    <li role="presentation"><a href="#">Add New Song</a></li>
+                </ul>
+                <div class="panel panel-default">
+
+                    <!-- Default panel contents -->
+                    <div class="panel-body">All Song</div>
+                        {% if error_message %}
+                            <h2>You don't have any songs</h2>
+                        {% endif %}
+
+                    <!-- Table -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Audio File</th>
+                                <th>Favorite</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for song in album.song_set.all %}
+                                <tr>
+                                    <td>{{ song.song_title }}</td>
+                                    <td>
+                                        <a target="_blank" href="#">
+                                            <button type="button" class="btn btn-success btn-xs">
+                                                <span class="glyphicon glyphicon-play"></span>&nbsp; Play
+                                            </button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn-favorite"><span class="glyphicon glyphicon-star {% if song.is_favorite %}active{% endif %}"></span></a>
+                                    </td>
+                                    <td>
+                                        <form action="#" method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="song_id" value="{{ song.id }}" />
+                                            <button type="submit" class="btn btn-danger btn-xs">
+                                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>    
+        </div>
+
+    </div>
+{% endblock %}
+
+
+
+
